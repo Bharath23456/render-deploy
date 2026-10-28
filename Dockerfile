@@ -14,5 +14,5 @@ COPY . .
 # Expose the port your app runs on
 EXPOSE 8080
 
-# Command to run the application
+# Command to run the applicationpp
 CMD ["node", "index.js"]
