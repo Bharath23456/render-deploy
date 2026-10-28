@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: render-deploy-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: render-deploy
+  template:
+    metadata:
+      labels:
+        app: render-deploy
+    spec:
+      containers:
+      - name: render-deploy
+        image: render-deploy:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: render-deploy-service
+spec:
+  type: NodePort
+  selector:
+    app: render-deploy
+  ports:
+    - port: 80
+      targetPort: 8080
+      nodePort: 30080
