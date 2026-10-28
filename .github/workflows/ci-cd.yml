@@ -25,9 +25,12 @@ jobs:
         with:
           context: .
           push: true
+          # ADD THESE TWO LINES BELOW SO BUILDX CAN AUTHENTICATE:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
           tags: ${{ secrets.DOCKER_USERNAME }}/render-deploy:latest
 
       - name: Trigger Render Deploy Hook
         if: success()
         run: |
-          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" 
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
