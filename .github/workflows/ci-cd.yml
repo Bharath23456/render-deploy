@@ -25,10 +25,13 @@ jobs:
         with:
           context: .
           push: true
-          # REMOVED username and password from here111111!
           tags: ${{ secrets.DOCKER_USERNAME }}/render-deploy:latest
-
-      - name: Trigger Render Deploy Hook
-        if: success()
-        run: |
-          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+          # Pass credentials directly to the build-push builder container:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          # Use local docker config context auth for buildx
+          build-args: |
+            BUILDKIT_CONTEXT_KEEP_GIT_DIR=1
+          # Pass the auth configuration explicitly via secrets or registry token
+          secret-envs: |
+            DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+            DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}
